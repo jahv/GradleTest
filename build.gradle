@@ -3,3 +3,7 @@ task helloWorld {
 		println 'Hello world!'
 	}
 }
+
+task helloWorld_v2 << {
+	println 'Hello world v2!'
+}
