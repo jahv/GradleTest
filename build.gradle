@@ -1,9 +1,21 @@
-task helloWorld {
-	doLast {
-		println 'Hello world!'
+configurations {
+	cargo {
+		description = 'Classpath for Cargo Ant tasks.'
+		visible = false	
+	}
+
+	jahv {
+		description = 'JAHV tests'
+		visible = true
 	}
 }
 
-task helloWorld_v2 << {
-	println 'Hello world v2!'
+ext.cargoVersion = '1.5.0'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	cargo "org.codehaus.cargo:cargo-ant:$cargoVersion"
 }
