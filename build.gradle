@@ -10,12 +10,74 @@ configurations {
 	}
 }
 
-ext.cargoVersion = '1.5.0'
+ext.cargoVersion = '1.4.19'
 
 repositories {
 	mavenCentral()
 }
 
 dependencies {
-	cargo "org.codehaus.cargo:cargo-ant:$cargoVersion"
+	cargo('org.codehaus.cargo:cargo-ant:1.4.19') {
+		exclude group: 'commons-logging', module: 'commons-logging'
+		//exclude group: 'xml-apis', module: 'xml-apis'
+		//transitive = false
+	}
+	cargo "commons-logging:commons-logging:1.0.+"
 }
+
+task helloWorld << {
+	println 'helloWorld'
+}
+
+task first << {
+	println 'First'
+}
+
+task second << {
+	println 'Second'
+}
+
+task third << {
+	println 'Third'
+}
+
+task mandatory(description: 'When no args this runs') << {
+	println 'This is mandatory'
+}
+
+defaultTasks 'mandatory'
+second.dependsOn 'first'
+third.dependsOn = ['second', 'first']
+
+task defaultProperties << {
+       println "Project: $project"
+       println "Name: $name"
+       println "Path: $path"
+       println "Project directory: $projectDir"
+       println "Build directory: $buildDir"
+       println "Version: $version"
+       println "Group: $project.group"
+       println "Description: $project.description"
+       println "AntBuilder: $ant"
+}
+
+task logLevels << {
+   // Simple logging sample.
+   logger.debug 'debug: Most verbose logging level.'
+   logger.log LogLevel.DEBUG, 'debug: Most verbose logging level.'
+   logger.info 'info: Use for information messages.'
+   logger.log LogLevel.INFO, 'info: Most verbose logging level.'
+   logger.lifecycle 'lifecycle: Progress information messages'
+   logger.log LogLevel.LIFECYCLE, 'lifecycle: Most verbose logging level.'
+   logger.warn 'warn: Warning messages like invalid configuration'
+   logger.log LogLevel.WARN, 'warn: Most verbose logging level.'
+   logger.quiet 'quiet: This is important but not an error'
+   logger.log LogLevel.QUIET, 'quiet: Most verbose logging level.'
+   logger.error 'error: Use for errors'
+   logger.log LogLevel.ERROR, 'error: Most verbose logging level.'
+}
+
+task createGradleWrapper(type: Wrapper) {
+     gradleVersion = '1.1'
+}
+
