@@ -25,6 +25,8 @@ dependencies {
 		//transitive = false
 	}
 	cargo "commons-logging:commons-logging:1.0.+"
+
+	testCompile 'junit:junit:[4.8,)'
 }
 
 task helloWorld << {
