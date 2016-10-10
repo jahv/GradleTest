@@ -1,3 +1,5 @@
+apply plugin: 'java'
+
 configurations {
 	cargo {
 		description = 'Classpath for Cargo Ant tasks.'
@@ -5,8 +7,8 @@ configurations {
 	}
 
 	jahv {
-		description = 'JAHV tests'
 		visible = true
+		description = 'JAHV tests'
 	}
 }
 
@@ -80,4 +82,48 @@ task logLevels << {
 task createGradleWrapper(type: Wrapper) {
      gradleVersion = '1.1'
 }
+
+task sourceSetJavaProperties << {
+   sourceSets {
+       main {
+           println "java.srcDirs = ${java.srcDirs}"
+           println "resources.srcDirs = ${resources.srcDirs}"
+           println "java.files = ${java.files.name}"
+           println "allJava.files = ${allJava.files.name}"
+           println "resources.files = ${resources.files.name}"
+           println "allSource.files = ${allSource.files.name}"
+           println "output.classesDir = ${output.classesDir}"
+           println "output.resourcesDir = ${output.resourcesDir}"
+           println "output.files = ${output.files}"
+		}
+		test {
+			println "output.files = ${output.files}"
+			println "compileClasspath = ${compileClasspath}"
+		}
+	}
+}
+
+sourceSets {
+	api
+	main {
+		compileClasspath = compileClasspath + files(api.output.classesDir)
+	}
+}
+
+classes.dependsOn apiClasses
+
+
+jar {
+     from {
+          //Include all dependencies
+          (configurations.runtime).collect {
+               it.isDirectory() ? it : zipTree(it)
+          }
+          //Include other source sets
+          sourceSets.api.output
+
+     }
+}
+
+
 
