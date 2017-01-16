@@ -1,0 +1,1 @@
+include 'subprojectA', 'subprojectB', 'subprojectC'
